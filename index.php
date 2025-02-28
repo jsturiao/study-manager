@@ -15,10 +15,21 @@ $examManager = new ExamManager();
 // Get question sets and their stats
 $questionSets = [];
 $questionDir = __DIR__ . '/data/questions';
+
+// Ensure question directory exists
+if (!is_dir($questionDir)) {
+    mkdir($questionDir, 0777, true);
+}
+
+// Get file stats
 $fileStats = $examManager->getAllFileStats($_SESSION['userId']);
 
 // Debug: Log the loaded stats
 error_log('Loaded file stats for user ' . $_SESSION['userId'] . ': ' . print_r($fileStats, true));
+
+// Count total files found
+$totalFiles = count(glob($questionDir . '/*.md'));
+error_log('Total .md files found: ' . $totalFiles);
 
 if (is_dir($questionDir)) {
     $files = glob($questionDir . '/*.md');
@@ -176,35 +187,128 @@ if (is_dir($questionDir)) {
     <div class="container">
         <!-- Question Sets View -->
         <div id="questionSetsContainer">
-            <h2 class="mb-4">Available Question Sets</h2>
+            <h2 class="mb-4">Question Sets Progress</h2>
+            
+            <!-- Overall Progress Summary -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <h5>Total Progress</h5>
+                            <?php
+                            $totalQuestions = 0;
+                            $totalAnswered = 0;
+                            $totalCorrect = 0;
+                            foreach ($questionSets as $set) {
+                                $totalQuestions += $set['stats']['total'];
+                                $totalAnswered += $set['stats']['answered'];
+                                $totalCorrect += $set['stats']['correct'];
+                            }
+                            $overallProgress = $totalQuestions > 0 ? round(($totalAnswered / $totalQuestions) * 100, 1) : 0;
+                            $overallSuccess = $totalAnswered > 0 ? round(($totalCorrect / $totalAnswered) * 100, 1) : 0;
+                            ?>
+                            <div class="h3"><?php echo $overallProgress; ?>%</div>
+                            <div class="text-muted"><?php echo $totalAnswered; ?>/<?php echo $totalQuestions; ?> Questions</div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h5>Success Rate</h5>
+                            <div class="h3"><?php echo $overallSuccess; ?>%</div>
+                            <div class="text-muted"><?php echo $totalCorrect; ?> Correct Answers</div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h5>Sets Completed</h5>
+                            <?php
+                            $completedSets = array_filter($questionSets, function($set) {
+                                return $set['stats']['answered'] === $set['stats']['total'] && $set['stats']['total'] > 0;
+                            });
+                            ?>
+                            <div class="h3"><?php echo count($completedSets); ?>/<?php echo count($questionSets); ?></div>
+                            <div class="text-muted">Question Sets</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mb-3">Available Sets (<?php echo count($questionSets); ?> found)</h3>
+            <?php if (empty($questionSets)): ?>
+            <div class="alert alert-info">
+                No question sets found in directory: <?php echo htmlspecialchars($questionDir); ?>
+            </div>
+            <?php else: ?>
             <div class="row">
                 <?php foreach ($questionSets as $set): ?>
                 <div class="col-md-4 mb-4">
                     <div class="card question-set-card"
                          data-filename="<?php echo htmlspecialchars($set['file']); ?>"
                          onclick="loadQuestionSet('<?php echo htmlspecialchars($set['file']); ?>')">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
+                                <?php echo htmlspecialchars($set['title']); ?>
+                                <?php if ($set['stats']['answered'] > 0): ?>
+                                    <span class="badge <?php echo $set['stats']['answered'] === $set['stats']['total'] ? 'bg-success' : 'bg-warning'; ?>">
+                                        <?php echo $set['stats']['answered'] === $set['stats']['total'] ? 'Completed' : 'In Progress'; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </h5>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars(ucwords($set['title'])); ?></h5>
-                            <div class="question-set-stats">
-                                <div class="d-flex justify-content-between">
-                                    <span>Progress</span>
-                                    <span class="progress-numbers"><?php echo $set['stats']['answered']; ?>/<?php echo $set['stats']['total']; ?></span>
-                                </div>
-                                <div class="progress progress-mini">
-                                    <div class="progress-bar" role="progressbar" 
-                                         style="width: <?php echo $set['stats']['answered'] > 0 ? ($set['stats']['answered'] / $set['stats']['total'] * 100) : 0; ?>%">
+                            <div class="question-set-stats p-2 bg-light rounded">
+                                <!-- Progress Bar -->
+                                <div class="mb-3">
+                                    <small class="text-muted d-flex justify-content-between mb-1">
+                                        <strong>Completion</strong>
+                                        <span class="progress-numbers"><?php echo $set['stats']['answered']; ?>/<?php echo $set['stats']['total']; ?></span>
+                                    </small>
+                                    <div class="progress" style="height: 8px;">
+                                        <?php
+                                        $progressPercent = $set['stats']['total'] > 0 ?
+                                            ($set['stats']['answered'] / $set['stats']['total'] * 100) : 0;
+                                        ?>
+                                        <div class="progress-bar <?php echo $progressPercent == 100 ? 'bg-success' : 'bg-primary'; ?>"
+                                             role="progressbar"
+                                             style="width: <?php echo $progressPercent; ?>%">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <span>Success Rate</span>
-                                    <span class="correct-stats">
-                                        <?php
-                                        $answered = $set['stats']['answered'];
-                                        $correct = $set['stats']['correct'];
-                                        $successRate = $answered > 0 ? round(($correct / $answered) * 100, 1) : 0;
-                                        echo "{$correct}/{$answered} ({$successRate}%)";
-                                        ?>
-                                    </span>
+
+                                <!-- Success Rate -->
+                                <div>
+                                    <small class="text-muted d-flex justify-content-between mb-1">
+                                        <strong>Success Rate</strong>
+                                        <span class="correct-stats">
+                                            <?php
+                                            $answered = $set['stats']['answered'];
+                                            $correct = $set['stats']['correct'];
+                                            $successRate = $answered > 0 ? round(($correct / $answered) * 100, 1) : 0;
+                                            echo "{$correct}/{$answered} ({$successRate}%)";
+                                            ?>
+                                        </span>
+                                    </small>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar <?php echo
+                                            $successRate >= 70 ? 'bg-success' :
+                                            ($successRate >= 50 ? 'bg-warning' :
+                                            ($answered > 0 ? 'bg-danger' : 'bg-secondary')); ?>"
+                                             role="progressbar"
+                                             style="width: <?php echo $successRate; ?>%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Question Stats -->
+                            <div class="mt-3 pt-2 border-top">
+                                <div class="row text-center">
+                                    <div class="col-6">
+                                        <small class="text-muted">Questions</small><br>
+                                        <strong><?php echo $set['stats']['total']; ?></strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">Correct</small><br>
+                                        <strong class="<?php echo $correct > 0 ? 'text-success' : 'text-muted'; ?>">
+                                            <?php echo $correct; ?>
+                                        </strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -212,6 +316,7 @@ if (is_dir($questionDir)) {
                 </div>
                 <?php endforeach; ?>
             </div>
+            <?php endif; ?>
         </div>
 
         <!-- Exam View -->
