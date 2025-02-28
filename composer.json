@@ -1,0 +1,13 @@
+{
+    "name": "study-manager/aws-practice-exam",
+    "description": "AWS Practice Exam Study Manager",
+    "require": {
+        "php": ">=7.4",
+        "erusev/parsedown": "^1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "StudyManager\\": "includes/"
+        }
+    }
+}
