@@ -96,17 +96,102 @@ class ExamManager {
     }
 
     public function saveProgress($userId, $fileId, $answers) {
+        error_log("SaveProgress called with userId: $userId, fileId: $fileId");
+        error_log("Answers data: " . print_r($answers, true));
+        
+        if (!is_array($answers)) {
+            throw new Exception("Invalid answers format");
+        }
+        
         $filename = $this->resultsPath . "/{$userId}_{$fileId}.json";
+        error_log("Saving to file: $filename");
+        
+        // Ensure the results directory exists
+        if (!is_dir($this->resultsPath)) {
+            if (!mkdir($this->resultsPath, 0777, true)) {
+                throw new Exception("Failed to create results directory");
+            }
+        }
+        
+        // Load existing data if it exists
+        $existingData = [];
+        if (file_exists($filename)) {
+            $existingContent = file_get_contents($filename);
+            if ($existingContent === false) {
+                throw new Exception("Failed to read existing progress file");
+            }
+            error_log("Existing content: " . $existingContent);
+            $existingData = json_decode($existingContent, true) ?: [];
+        }
+
+        // Initialize data structure with validation
         $data = [
             'userId' => $userId,
             'fileId' => $fileId,
-            'answers' => $answers,
+            'answers' => [],
             'timestamp' => time()
         ];
+
+        // Merge existing answers if they exist and are valid
+        if (isset($existingData['answers']) && is_array($existingData['answers'])) {
+            foreach ($existingData['answers'] as $qNum => $answer) {
+                if (isset($answer['questionNumber']) && isset($answer['answer'])) {
+                    $data['answers'][$qNum] = $answer;
+                }
+            }
+        }
+
+        // Merge new answers, ensuring proper structure
+        foreach ($answers as $qNum => $answer) {
+            if (!isset($answer['questionNumber'])) {
+                $answer['questionNumber'] = (int)$qNum;
+            }
+            if (!isset($answer['examFile'])) {
+                $answer['examFile'] = $fileId;
+            }
+            $data['answers'][$qNum] = $answer;
+        }
+
+        error_log("Final data structure: " . print_r($data, true));
+
+        // Handle single answer update
+        if (isset($answers['questionId'])) {
+            $questionNumber = (int)$answers['questionId'];
+            $data['answers'][$questionNumber] = [
+                'questionNumber' => $questionNumber,
+                'examFile' => $fileId,
+                'answer' => $answers['answer'],
+                'correctAnswer' => $answers['correctAnswer'],
+                'correct' => (bool)$answers['correct'],
+                'answered' => true,
+                'timestamp' => time()
+            ];
+        }
+        // Handle bulk answers update
+        else if (is_array($answers)) {
+            foreach ($answers as $answer) {
+                // Check if the answer has both questionId and data
+                if (isset($answer['questionId'])) {
+                    $questionNumber = (int)$answer['questionId'];
+                } else if (isset($answer['question']) && preg_match('/^Question\s+(\d+)/i', $answer['question'], $matches)) {
+                    $questionNumber = (int)$matches[1];
+                } else {
+                    continue; // Skip if no valid question number found
+                }
+                
+                $data['answers'][$questionNumber] = [
+                    'questionNumber' => $questionNumber,
+                    'examFile' => $fileId,
+                    'answer' => $answer['answer'],
+                    'correctAnswer' => $answer['correctAnswer'],
+                    'answered' => true,
+                    'correct' => (bool)$answer['correct'],
+                    'timestamp' => time()
+                ];
+            }
+        }
         
-        error_log("Saving progress to file: $filename");
-        error_log("Progress data: " . print_r($data, true));
-        
+        // Save the file with updated answers
         file_put_contents($filename, json_encode($data));
         
         // Calculate and save updated stats
@@ -117,22 +202,43 @@ class ExamManager {
     }
 
     private function initializeStatsForFile($fileId) {
-        $filePath = $this->dataPath . '/questions/' . $fileId;
+        // Make sure we're using the correct data path for questions
+        $filePath = __DIR__ . '/../data/questions/' . $fileId;
         if (!file_exists($filePath)) {
             error_log("File not found: $filePath");
-            return;
+            // Try alternate path
+            $filePath = $this->dataPath . '/questions/' . $fileId;
+            if (!file_exists($filePath)) {
+                error_log("File not found in alternate path: $filePath");
+                return;
+            }
         }
 
-        // Count questions in the file
+        error_log("Reading questions from: $filePath");
+        // Count questions by looking for numbered questions in the file
         $content = file_get_contents($filePath);
-        preg_match_all('/^#+ Question \d+|<details>|Answer:/mi', $content, $matches);
-        $totalQuestions = count($matches[0]);
+        if ($content === false) {
+            error_log("Failed to read file content from: $filePath");
+            return;
+        }
+        
+        // Count <details> tags as they indicate answer sections
+        $detailsCount = substr_count($content, '<details>');
+        
+        // Count "Answer:" occurrences
+        $answerCount = substr_count($content, 'Answer:');
+        
+        // Count actual numbered questions by pattern '\d+\.' at the start of lines
+        preg_match_all('/^\d+\./m', $content, $matches);
+        $numberedQuestions = count($matches[0]);
+        
+        error_log("File $fileId question counts - Details: $detailsCount, Answers: $answerCount, Numbered: $numberedQuestions");
+        
+        // Use the most reliable count (numbered questions should match details/answers)
+        $totalQuestions = max($detailsCount, $answerCount, $numberedQuestions);
         
         if ($totalQuestions === 0) {
-            $detailsCount = substr_count($content, '<details>');
-            $answerCount = substr_count($content, 'Answer:');
-            $questionCount = substr_count($content, 'Question ');
-            $totalQuestions = max($detailsCount, $answerCount, $questionCount);
+            error_log("WARNING: No questions found in file: $fileId");
         }
 
         // Create initial stats file
@@ -159,35 +265,71 @@ class ExamManager {
     }
 
     public function getFileStats($userId, $fileId) {
-        // Always recalculate stats from actual progress file
+        // First reinitialize stats to ensure correct total
+        $this->initializeStatsForFile($fileId);
+        // Then recalculate stats from actual progress file
         return $this->calculateAndSaveStats($userId, $fileId);
+    }
+
+    public function reinitializeAllStats() {
+        $files = glob($this->dataPath . '/questions/*.md');
+        foreach ($files as $file) {
+            $fileId = basename($file);
+            $this->initializeStatsForFile($fileId);
+            // Recalculate stats for each user that has progress
+            $progressFiles = glob($this->resultsPath . '/*_' . $fileId . '.json');
+            foreach ($progressFiles as $progressFile) {
+                $userId = basename($progressFile, '_' . $fileId . '.json');
+                $this->calculateAndSaveStats($userId, $fileId);
+            }
+        }
     }
 
     public function getAllFileStats($userId) {
         $stats = [];
         error_log("Getting stats for all files for user: $userId");
         
-        // Create directory if it doesn't exist
-        $questionDir = $this->dataPath . '/questions';
-        if (!is_dir($questionDir)) {
-            mkdir($questionDir, 0777, true);
+        // Try both possible paths for question files
+        $questionDir = __DIR__ . '/../data/questions';
+        $files = glob($questionDir . '/*.md');
+        
+        if (empty($files)) {
+            error_log("No files found in primary path, trying alternate path");
+            $questionDir = $this->dataPath . '/questions';
+            if (!is_dir($questionDir)) {
+                mkdir($questionDir, 0777, true);
+            }
+            $files = glob($questionDir . '/*.md');
         }
         
-        // Get all question files first
-        $files = glob($questionDir . '/*.md');
+        error_log("Looking for files in: $questionDir");
         error_log("Found " . count($files) . " question files");
         
         foreach ($files as $file) {
             $fileId = basename($file);
             error_log("Processing file: $fileId");
             
-            // Count total questions
+            // Count total questions using standardized counting method
             $content = file_get_contents($file);
-            // Look for lines containing 'Answer:' or '<details>' to count questions
-            $totalQuestions = max(
-                substr_count($content, '<details>'),
-                substr_count($content, 'Answer:')
-            );
+            if ($content === false) {
+                error_log("Failed to read file: $fileId");
+                continue;
+            }
+
+            // Count questions consistently
+            $detailsCount = substr_count($content, '<details>');
+            $answerCount = substr_count($content, 'Answer:');
+            preg_match_all('/^\d+\./m', $content, $matches);
+            $numberedQuestions = count($matches[0]);
+            
+            error_log("File $fileId question counts - Details: $detailsCount, Answers: $answerCount, Numbered: $numberedQuestions");
+            
+            // Use the most reliable count
+            $totalQuestions = max($detailsCount, $answerCount, $numberedQuestions);
+            
+            if ($totalQuestions === 0) {
+                error_log("WARNING: No questions found in file: $fileId");
+            }
             error_log("Found $totalQuestions questions in $fileId");
             
             // Initialize stats for this file
@@ -205,10 +347,14 @@ class ExamManager {
                 $progress = json_decode(file_get_contents($progressFile), true);
                 if ($progress && isset($progress['answers'])) {
                     $answers = $progress['answers'];
+                    // Handle both array and object formats for answers
                     $stats[$fileId]['answered'] = count($answers);
+                    
                     $stats[$fileId]['correct'] = count(array_filter($answers, function($a) {
-                        return isset($a['correct']) && $a['correct'];
+                        return isset($a['correct']) && $a['correct'] === true;
                     }));
+                    
+                    error_log("File $fileId stats - Questions: {$stats[$fileId]['total']}, Answered: {$stats[$fileId]['answered']}, Correct: {$stats[$fileId]['correct']}");
                     if ($stats[$fileId]['answered'] > 0) {
                         $stats[$fileId]['percentage'] = ($stats[$fileId]['correct'] / $stats[$fileId]['answered']) * 100;
                     }
@@ -227,10 +373,25 @@ class ExamManager {
         // Get total questions from the question file
         $questionFile = $this->dataPath . '/questions/' . $fileId;
         $totalQuestions = 0;
+        
         if (file_exists($questionFile)) {
             $content = file_get_contents($questionFile);
-            // Count questions by counting "Answer:" occurrences
-            $totalQuestions = substr_count($content, "Answer:");
+            if ($content !== false) {
+                // Count questions consistently
+                $detailsCount = substr_count($content, '<details>');
+                $answerCount = substr_count($content, 'Answer:');
+                preg_match_all('/^\d+\./m', $content, $matches);
+                $numberedQuestions = count($matches[0]);
+                
+                error_log("File $fileId question counts - Details: $detailsCount, Answers: $answerCount, Numbered: $numberedQuestions");
+                
+                // Use the most reliable count
+                $totalQuestions = max($detailsCount, $answerCount, $numberedQuestions);
+                
+                error_log("Total questions for $fileId: $totalQuestions");
+            } else {
+                error_log("Failed to read question file: $questionFile");
+            }
         }
         
         $stats = [
@@ -242,17 +403,17 @@ class ExamManager {
         ];
 
         if ($progress && isset($progress['answers'])) {
-            error_log("Found answers in progress data");
+            error_log("Found answers in progress data: " . print_r($progress['answers'], true));
             $answers = $progress['answers'];
+            // Handle both array and object formats for answers
+            $stats['answered'] = count($answers);
             
-            foreach ($answers as $answer) {
-                if (isset($answer['answered']) && $answer['answered']) {
-                    $stats['answered']++;
-                    if (isset($answer['correct']) && $answer['correct']) {
-                        $stats['correct']++;
-                    }
-                }
-            }
+            $stats['correct'] = count(array_filter($answers, function($a) {
+                return isset($a['correct']) && $a['correct'] === true;
+            }));
+            
+            error_log("Calculated stats - Questions: {$stats['total']}, Answered: {$stats['answered']}, Correct: {$stats['correct']}");
+            error_log("Calculated stats - Answered: {$stats['answered']}, Correct: {$stats['correct']}");
             
             // Calculate percentages
             if ($stats['answered'] > 0) {

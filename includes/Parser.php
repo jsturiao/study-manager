@@ -41,13 +41,9 @@ class Parser {
                 continue;
             }
             
-            // Skip headers
-            if (strpos($line, '#') === 0) {
-                continue;
-            }
-
-            // Question starts with a number
-            if (preg_match('/^(\d+)\.\s+(.*)/', $line, $matches)) {
+            // Question can start with # or a number
+            if (preg_match('/^#+\s*Question\s+(\d+)\.?\s*(.*)/', $line, $matches) ||
+                preg_match('/^(\d+)\.\s+(.*)/', $line, $matches)) {
                 if ($currentQuestion) {
                     $questions[] = $currentQuestion;
                 }
@@ -67,13 +63,40 @@ class Parser {
                 continue;
             }
 
-            // Parse answer
-            if (preg_match('/Correct answer:\s*([A-E],?\s*)+/', $line, $matches)) {
-                $answers = explode(',', str_replace(['Correct answer:', ' '], '', $line));
-                $currentQuestion['answer'] = array_map('trim', $answers);
-                if (count($currentQuestion['answer']) === 1) {
-                    $currentQuestion['answer'] = $currentQuestion['answer'][0];
+            // Handle <details> format
+            if (strpos($line, '<details>') === 0 && $currentQuestion === null) {
+                $currentQuestion = [
+                    'id' => count($questions) + 1,
+                    'question' => '',
+                    'options' => [],
+                    'answer' => [],
+                    'explanation' => ''
+                ];
+                continue;
+            }
+
+            // Parse answer (support multiple formats)
+            if (preg_match('/(?:Correct )?[Aa]nswer:\s*([A-E],?\s*)+/', $line, $matches) ||
+                preg_match('/^Answer:\s*([A-E],?\s*)+/', $line, $matches)) {
+                
+                // Extract answers from the line, handling various formats
+                $answerPart = preg_replace('/^(?:Correct )?[Aa]nswer:\s*/', '', $line);
+                $answers = preg_split('/[,\s]+/', $answerPart);
+                
+                // Clean and validate answers
+                $answers = array_filter(array_map('trim', $answers), function($answer) {
+                    return preg_match('/^[A-E]$/', $answer);
+                });
+                
+                if (!empty($answers)) {
+                    $currentQuestion['answer'] = count($answers) === 1 ? reset($answers) : array_values($answers);
                 }
+                continue;
+            }
+
+            // If we're in a question but haven't set the question text yet
+            if ($currentQuestion && empty($currentQuestion['question']) && $line && strpos($line, '-') !== 0) {
+                $currentQuestion['question'] = $line;
                 continue;
             }
         }
