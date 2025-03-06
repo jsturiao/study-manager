@@ -1,7 +1,7 @@
 [
     {
         "id": "1",
-        "question": "A global company with a large number of AWS accounts is seeking a way in which they can centrally manage billing and security policies across all accounts. Which AWS Service will assist them in meeting these goals?",
+        "question": "Uma empresa global com um grande número de contas AWS está procurando uma maneira de gerenciar centralmente políticas de faturamento e segurança em todas as contas. Qual serviço da AWS ajudará a atingir esses objetivos?",
         "options": {
             "A": "AWS Organizations.",
             "B": "AWS Trusted Advisor.",
@@ -13,7 +13,7 @@
     },
     {
         "id": "2",
-        "question": "Which service provides object-level storage in AWS?",
+        "question": "Qual serviço fornece armazenamento em nível de objeto na AWS?",
         "options": {
             "A": "Amazon EBS.",
             "B": "Amazon Instance Store.",
@@ -25,7 +25,7 @@
     },
     {
         "id": "3",
-        "question": "A company is concerned that they are spending money on underutilized compute resources in AWS. Which AWS feature will help ensure that their applications are automatically adding\/removing EC2 compute capacity to closely match the required demand?",
+        "question": "Uma empresa está preocupada em gastar dinheiro com recursos de computação subutilizados na AWS. Qual recurso da AWS ajudará a garantir que seus aplicativos adicionem/removam automaticamente capacidade de computação EC2 para corresponder de perto à demanda necessária?",
         "options": {
             "A": "AWS Elastic Load Balancer.",
             "B": "AWS Budgets.",
@@ -37,7 +37,7 @@
     },
     {
         "id": "4",
-        "question": "Which S3 storage class is best for data with unpredictable access patterns?",
+        "question": "Qual classe de armazenamento S3 é melhor para dados com padrões de acesso imprevisíveis?",
         "options": {
             "A": "Amazon S3 Intelligent-Tiering.",
             "B": "Amazon S3 Glacier Flexible Retrieval.",
@@ -49,7 +49,7 @@
     },
     {
         "id": "5",
-        "question": "What is the AWS database service that allows you to upload data structured in key-value format?",
+        "question": "Qual é o serviço de banco de dados da AWS que permite fazer upload de dados estruturados em formato chave-valor?",
         "options": {
             "A": "Amazon DynamoDB.",
             "B": "Amazon Aurora.",
@@ -61,19 +61,19 @@
     },
     {
         "id": "6",
-        "question": "Which of the following is NOT correct regarding Amazon EC2 On-demand instances?",
+        "question": "Qual das seguintes afirmações NÃO está correta em relação às instâncias On-demand do Amazon EC2?",
         "options": {
-            "A": "You have to pay a start-up fee when launching a new instance for the first time.",
-            "B": "The on-demand instances follow the AWS pay-as-you-go pricing model.",
-            "C": "With on-demand instances, no longer-term commitments or upfront payments are needed.",
-            "D": "When using on-demand Linux instances, you are charged per second based on an hourly rate."
+            "A": "Você precisa pagar uma taxa de inicialização ao lançar uma nova instância pela primeira vez.",
+            "B": "As instâncias on-demand seguem o modelo de preços pay-as-you-go da AWS.",
+            "C": "Com instâncias on-demand, não são necessários compromissos de longo prazo ou pagamentos antecipados.",
+            "D": "Ao usar instâncias on-demand Linux, você é cobrado por segundo com base em uma taxa horária."
         },
         "answer": "A",
         "explanation": ""
     },
     {
         "id": "7",
-        "question": "A company has moved to AWS recently. Which of the following AWS Services will help ensure that they have the proper security settings? (Choose TWO)",
+        "question": "Uma empresa mudou-se recentemente para a AWS. Quais dos seguintes serviços da AWS ajudarão a garantir que eles tenham as configurações de segurança adequadas? (Escolha DUAS)",
         "options": {
             "A": "AWS Trusted Advisor.",
             "B": "Amazon Inspector.",
@@ -89,10 +89,10 @@
     },
     {
         "id": "8",
-        "question": "What is the AWS feature that provides an additional level of security above the default authentication mechanism of usernames and passwords?",
+        "question": "Qual é o recurso da AWS que fornece um nível adicional de segurança além do mecanismo de autenticação padrão de nomes de usuário e senhas?",
         "options": {
-            "A": "Encrypted keys.",
-            "B": "Email verification.",
+            "A": "Chaves criptografadas.",
+            "B": "Verificação por e-mail.",
             "C": "AWS KMS.",
             "D": "AWS MFA."
         },
@@ -101,7 +101,7 @@
     },
     {
         "id": "9",
-        "question": "A company is introducing a new product to their customers, and is expecting a surge in traffic to their web application. As part of their Enterprise Support plan, which of the following provides the company with architectural and scaling guidance?",
+        "question": "Uma empresa está lançando um novo produto para seus clientes e espera um aumento no tráfego para seu aplicativo web. Como parte do plano de Suporte Empresarial, qual das seguintes opções fornece à empresa orientação arquitetônica e de escalabilidade?",
         "options": {
             "A": "AWS Knowledge Center.",
             "B": "AWS Health Dashboard.",
@@ -113,7 +113,7 @@
     },
     {
         "id": "10",
-        "question": "You work as an on-premises MySQL DBA. The work of database configuration, backups, patching, and DR can be time-consuming and repetitive. Your company has decided to migrate to the AWS Cloud. Which of the following can help save time on database maintenance so you can focus on data architecture and performance?",
+        "question": "Você trabalha como DBA MySQL on-premises. O trabalho de configuração de banco de dados, backups, patches e DR pode ser demorado e repetitivo. Sua empresa decidiu migrar para a AWS Cloud. Qual das seguintes opções pode ajudar a economizar tempo na manutenção do banco de dados para que você possa se concentrar na arquitetura e desempenho dos dados?",
         "options": {
             "A": "Amazon RDS.",
             "B": "Amazon Redshift.",
@@ -125,31 +125,31 @@
     },
     {
         "id": "11",
-        "question": "Which of the below is a best-practice when designing solutions on AWS?",
+        "question": "Qual das opções abaixo é uma prática recomendada ao projetar soluções na AWS?",
         "options": {
-            "A": "Invest heavily in architecting your environment, as it is not easy to change your design later.",
-            "B": "Use AWS reservations to reduce costs when testing your production environment.",
-            "C": "Automate wherever possible to make architectural (\u00a9 ) experimentation easier.",
-            "D": "Provision a large compute capacity to handle any spikes in load"
+            "A": "Investir pesadamente na arquitetura do seu ambiente, pois não é fácil mudar seu design depois.",
+            "B": "Usar reservas da AWS para reduzir custos ao testar seu ambiente de produção.",
+            "C": "Automatizar sempre que possível para facilitar a experimentação arquitetônica.",
+            "D": "Provisionar uma capacidade de computação grande para lidar com qualquer pico de carga."
         },
         "answer": "C",
         "explanation": ""
     },
     {
         "id": "12",
-        "question": "According to the AWS Acceptable Use Policy, which of the following statements is true regarding penetration testing of EC2 instances?",
+        "question": "De acordo com a Política de Uso Aceitável da AWS, qual das seguintes afirmações é verdadeira em relação aos testes de penetração das instâncias EC2?",
         "options": {
-            "A": "Penetration testing is not allowed in AWS.",
-            "B": "Penetration testing is performed automatically by AWS to determine vulnerabilities in your AWS infrastructure.",
-            "C": "Penetration testing can be performed by the customer on their own instances without prior authorization from AWS.",
-            "D": "The AWS customers are only allowed to perform penetration testing on services managed by AWS."
+            "A": "Testes de penetração não são permitidos na AWS.",
+            "B": "Testes de penetração são realizados automaticamente pela AWS para determinar vulnerabilidades em sua infraestrutura AWS.",
+            "C": "Testes de penetração podem ser realizados pelo cliente em suas próprias instâncias sem autorização prévia da AWS.",
+            "D": "Os clientes da AWS só podem realizar testes de penetração em serviços gerenciados pela AWS."
         },
         "answer": "C",
         "explanation": ""
     },
     {
         "id": "13",
-        "question": "Which service is used to ensure that messages between software components are not lost if one or more components fail?",
+        "question": "Qual serviço é usado para garantir que mensagens entre componentes de software não sejam perdidas se um ou mais componentes falharem?",
         "options": {
             "A": "Amazon SQS.",
             "B": "Amazon SES.",
@@ -161,13 +161,13 @@
     },
     {
         "id": "14",
-        "question": "The principle \u201cdesign for failure and nothing will fail\u201d is very important when designing your AWS Cloud architecture. Which of the following would help adhere to this principle? (Choose TWO)",
+        "question": "O princípio \"design para falha e nada falhará\" é muito importante ao projetar sua arquitetura na AWS Cloud. Qual das opções abaixo ajudaria a aderir a este princípio? (Escolha DUAS)",
         "options": {
-            "A": "Multi-factor authentication.",
-            "B": "Availability Zones.",
+            "A": "Autenticação multifator.",
+            "B": "Zonas de Disponibilidade.",
             "C": "Elastic Load Balancing.",
-            "D": "Penetration testing.",
-            "E": "Vertical Scaling."
+            "D": "Testes de penetração.",
+            "E": "Escalabilidade vertical."
         },
         "answer": [
             "B",
@@ -177,7 +177,7 @@
     },
     {
         "id": "15",
-        "question": "What is the AWS service that provides a virtual network dedicated to your AWS account?",
+        "question": "Qual é o serviço da AWS que fornece uma rede virtual dedicada à sua conta AWS?",
         "options": {
             "A": "AWS VPN.",
             "B": "AWS Subnets.",
@@ -189,13 +189,13 @@
     },
     {
         "id": "16",
-        "question": "According to the AWS Shared responsibility model, which of the following are the responsibility of the customer? (Choose TWO)",
+        "question": "De acordo com o modelo de responsabilidade compartilhada da AWS, quais das seguintes são responsabilidades do cliente? (Escolha DUAS)",
         "options": {
-            "A": "Managing environmental events of AWS data centers.",
-            "B": "Protecting the confidentiality of data in transit in Amazon S3.",
-            "C": "Controlling physical access to AWS Regions.",
-            "D": "Ensuring that the underlying EC2 host is configured properly.",
-            "E": "Patching applications installed on Amazon EC2."
+            "A": "Gerenciar eventos ambientais dos data centers da AWS.",
+            "B": "Proteger a confidencialidade dos dados em trânsito no Amazon S3.",
+            "C": "Controlar o acesso físico às Regiões da AWS.",
+            "D": "Garantir que o host EC2 subjacente esteja configurado corretamente.",
+            "E": "Aplicar patches em aplicativos instalados no Amazon EC2."
         },
         "answer": [
             "B",
@@ -205,7 +205,7 @@
     },
     {
         "id": "17",
-        "question": "Which of the following AWS services can be used as a compute resource? (Choose TWO)",
+        "question": "Quais dos seguintes serviços da AWS podem ser usados como recurso de computação? (Escolha DUAS)",
         "options": {
             "A": "Amazon VPC.",
             "B": "Amazon CloudWatch.",
@@ -221,7 +221,7 @@
     },
     {
         "id": "18",
-        "question": "Your company is designing a new application that will store and retrieve photos and videos. Which of the following services should you recommend as the underlying storage mechanism?",
+        "question": "Sua empresa está projetando um novo aplicativo que armazenará e recuperará fotos e vídeos. Qual das seguintes opções você deve recomendar como o mecanismo de armazenamento subjacente?",
         "options": {
             "A": "Amazon EBS.",
             "B": "Amazon SQS.",
@@ -233,11 +233,11 @@
     },
     {
         "id": "19",
-        "question": "Which of the following is equivalent to a user name and password and is used to authenticate your programmatic access to AWS services and APIs?",
+        "question": "Qual das seguintes opções é equivalente a um nome de usuário e senha e é usada para autenticar seu acesso programático aos serviços e APIs da AWS?",
         "options": {
-            "A": "Instance Password.",
-            "B": "Key pairs.",
-            "C": "Access Keys.",
+            "A": "Senha da instância.",
+            "B": "Pares de chaves.",
+            "C": "Chaves de acesso.",
             "D": "MFA."
         },
         "answer": "C",
@@ -245,19 +245,19 @@
     },
     {
         "id": "20",
-        "question": "What does Amazon ElastiCache provide?",
+        "question": "O que o Amazon ElastiCache fornece?",
         "options": {
-            "A": "In-memory caching for read-heavy applications.",
-            "B": "An Ehcache compatible in-memory data store.",
-            "C": "An online software store that allows Customers to launch pre-configured software with just few clicks.",
-            "D": "A domain name system in the cloud."
+            "A": "Cache na memória para aplicativos com leitura intensa.",
+            "B": "Um armazenamento de dados na memória compatível com Ehcache.",
+            "C": "Uma loja de software online que permite aos clientes lançar software pré-configurado com apenas alguns cliques.",
+            "D": "Um sistema de nomes de domínio na nuvem."
         },
         "answer": "A",
         "explanation": ""
     },
     {
         "id": "21",
-        "question": "What is the AWS service that enables you to manage all of your AWS accounts from a single master account?",
+        "question": "Qual é o serviço da AWS que permite gerenciar todas as suas contas AWS a partir de uma única conta master?",
         "options": {
             "A": "AWS WAF.",
             "B": "AWS Trusted Advisor.",
@@ -269,37 +269,37 @@
     },
     {
         "id": "22",
-        "question": "Which of the following EC2 instance purchasing options supports the Bring Your Own License (BYOL) model for almost every BYOL scenario?",
+        "question": "Qual das opções de compra de instâncias EC2 abaixo suporta o modelo Bring Your Own License (BYOL) para quase todos os cenários de BYOL?",
         "options": {
-            "A": "Dedicated Instances.",
-            "B": "Dedicated Hosts.",
-            "C": "On-demand Instances.",
-            "D": "Reserved Instances."
+            "A": "Instâncias Dedicadas.",
+            "B": "Hosts Dedicados.",
+            "C": "Instâncias Sob Demanda.",
+            "D": "Instâncias Reservadas."
         },
         "answer": "B",
         "explanation": ""
     },
     {
         "id": "23",
-        "question": "Which of the following is one of the benefits of moving infrastructure from an on-premises data center to AWS?",
+        "question": "Qual das seguintes é uma das vantagens de mover a infraestrutura de um data center on-premises para a AWS?",
         "options": {
-            "A": "Free support for all enterprise customers.",
-            "B": "Automatic data protection.",
-            "C": "Reduced Capital Expenditure (CapEx).",
-            "D": "AWS holds responsibility for managing customer applications."
+            "A": "Suporte gratuito para todos os clientes empresariais.",
+            "B": "Proteção automática de dados.",
+            "C": "Redução de Despesas de Capital (CapEx).",
+            "D": "A AWS é responsável por gerenciar aplicativos de clientes."
         },
         "answer": "C",
         "explanation": ""
     },
     {
         "id": "24",
-        "question": "Which of the following are important design principles you should adopt when designing systems on AWS? (Choose TWO)",
+        "question": "Quais das seguintes são princípios de design importantes que você deve adotar ao projetar sistemas na AWS? (Escolha DUAS)",
         "options": {
-            "A": "Always use Global Services in your architecture rather than Regional Services.",
-            "B": "Always choose to pay as you go.",
-            "C": "Treat servers as fixed resources.",
-            "D": "Automate wherever possible.",
-            "E": "Remove single points of failure."
+            "A": "Sempre use Serviços Globais em sua arquitetura em vez de Serviços Regionais.",
+            "B": "Sempre escolha pagar conforme o uso.",
+            "C": "Trate servidores como recursos fixos.",
+            "D": "Automatize sempre que possível.",
+            "E": "Remova pontos únicos de falha."
         },
         "answer": [
             "D",
@@ -309,7 +309,7 @@
     },
     {
         "id": "25",
-        "question": "Which AWS Service can be used to establish a dedicated, private network connection between AWS and your datacenter?",
+        "question": "Qual serviço da AWS pode ser usado para estabelecer uma conexão de rede dedicada e privada entre a AWS e seu data center?",
         "options": {
             "A": "AWS Direct Connect.",
             "B": "Amazon CloudFront.",
@@ -321,7 +321,7 @@
     },
     {
         "id": "26",
-        "question": "You are working on two projects that require completely different network configurations. Which AWS service or feature will allow you to isolate resources and network configurations?",
+        "question": "Você está trabalhando em dois projetos que exigem configurações de rede completamente diferentes. Qual serviço ou recurso da AWS permitirá que você isole recursos e configurações de rede?",
         "options": {
             "A": "Internet gateways.",
             "B": "Virtual Private Cloud.",
@@ -333,7 +333,7 @@
     },
     {
         "id": "27",
-        "question": "Which of the following services can help protect your web applications from SQL injection and other vulnerabilities in your application code?",
+        "question": "Qual dos seguintes serviços pode ajudar a proteger suas aplicações web contra injeção de SQL e outras vulnerabilidades no código do seu aplicativo?",
         "options": {
             "A": "Amazon Cognito.",
             "B": "AWS IAM.",
@@ -345,7 +345,7 @@
     },
     {
         "id": "28",
-        "question": "An organization needs to analyze and process a large number of data sets. Which AWS service should they use?",
+        "question": "Uma organização precisa analisar e processar um grande número de conjuntos de dados. Qual serviço da AWS eles devem usar?",
         "options": {
             "A": "Amazon EMR.",
             "B": "Amazon MQ.",
@@ -357,13 +357,13 @@
     },
     {
         "id": "29",
-        "question": "Based on the AWS Shared Responsibility Model, which of the following are the sole responsibility of AWS? (Choose TWO)",
+        "question": "Com base no Modelo de Responsabilidade Compartilhada da AWS, quais das seguintes são responsabilidades exclusivas da AWS? (Escolha DUAS)",
         "options": {
-            "A": "Monitoring network performance.",
-            "B": "Installing software on EC2 instances.",
-            "C": "Creating hypervisors.",
-            "D": "Configuring Access Control Lists (ACLs).",
-            "E": "Hardware maintenance."
+            "A": "Monitoramento do desempenho da rede.",
+            "B": "Instalação de software em instâncias EC2.",
+            "C": "Criação de hipervisores.",
+            "D": "Configuração de Listas de Controle de Acesso (ACLs).",
+            "E": "Manutenção de hardware."
         },
         "answer": [
             "C",
@@ -373,7 +373,7 @@
     },
     {
         "id": "30",
-        "question": "What is the AWS service that provides you the highest level of control over the underlying virtual infrastructure?",
+        "question": "Qual é o serviço da AWS que fornece o maior nível de controle sobre a infraestrutura virtual subjacente?",
         "options": {
             "A": "Amazon Redshift.",
             "B": "Amazon DynamoDB.",
@@ -385,23 +385,23 @@
     },
     {
         "id": "31",
-        "question": "What are the default security credentials that are required to access the AWS management console for an IAM user account?",
+        "question": "Quais são as credenciais de segurança padrão necessárias para acessar o console de gerenciamento da AWS para uma conta de usuário IAM?",
         "options": {
             "A": "MFA.",
-            "B": "Security tokens.",
-            "C": "A user name and password.",
-            "D": "Access keys."
+            "B": "Tokens de segurança.",
+            "C": "Nome de usuário e senha.",
+            "D": "Chaves de acesso."
         },
         "answer": "C",
         "explanation": ""
     },
     {
         "id": "32",
-        "question": "In your on-premises environment, you can create as many virtual servers as you need from a single template. What can you use to perform the same in AWS?",
+        "question": "No seu ambiente on-premises, você pode criar quantos servidores virtuais precisar a partir de um único modelo. O que você pode usar para fazer o mesmo na AWS?",
         "options": {
             "A": "IAM.",
-            "B": "An internet gateway.",
-            "C": "EBS Snapshot.",
+            "B": "Um internet gateway.",
+            "C": "Snapshot do EBS.",
             "D": "AMI."
         },
         "answer": "D",
@@ -409,13 +409,13 @@
     },
     {
         "id": "33",
-        "question": "What are two advantages of using Cloud Computing over using traditional data centers? (Choose TWO)",
+        "question": "Quais são duas vantagens de usar Computação em Nuvem em vez de usar data centers tradicionais? (Escolha DUAS)",
         "options": {
-            "A": "Reserved Compute capacity.",
-            "B": "Eliminating Single Points of Failure (SPOFs).",
-            "C": "Distributed infrastructure.",
-            "D": "Virtualized compute resources.",
-            "E": "Dedicated hosting."
+            "A": "Capacidade de computação reservada.",
+            "B": "Eliminação de Pontos Únicos de Falha (SPOFs).",
+            "C": "Infraestrutura distribuída.",
+            "D": "Recursos de computação virtualizados.",
+            "E": "Hospedagem dedicada."
         },
         "answer": [
             "B",
@@ -425,13 +425,13 @@
     },
     {
         "id": "34",
-        "question": "Which of the following aspects of security are managed by AWS? (Choose TWO)",
+        "question": "Quais dos seguintes aspectos de segurança são gerenciados pela AWS? (Escolha DUAS)",
         "options": {
-            "A": "Encryption of EBS volumes.",
-            "B": "VPC security.",
-            "C": "Access permissions.",
-            "D": "Hardware patching.",
-            "E": "Securing global physical infrastructure."
+            "A": "Criptografia de volumes EBS.",
+            "B": "Segurança de VPC.",
+            "C": "Permissões de acesso.",
+            "D": "Aplicação de patches de hardware.",
+            "E": "Segurança da infraestrutura física global."
         },
         "answer": [
             "D",
@@ -441,31 +441,31 @@
     },
     {
         "id": "35",
-        "question": "Which statement best describes the operational excellence pillar of the AWS Well-Architected Framework?",
+        "question": "Qual afirmação melhor descreve o pilar de excelência operacional do AWS Well-Architected Framework?",
         "options": {
-            "A": "The ability of a system to recover gracefully from failure.",
-            "B": "The efficient use of computing resources to meet requirements.",
-            "C": "The ability to monitor systems and improve supporting processes and procedures.",
-            "D": "The ability to manage datacenter operations more efficiently."
+            "A": "A capacidade de um sistema se recuperar graciosamente de falhas.",
+            "B": "O uso eficiente de recursos de computação para atender aos requisitos.",
+            "C": "A capacidade de monitorar sistemas e melhorar processos e procedimentos de suporte.",
+            "D": "A capacidade de gerenciar operações de data center de forma mais eficiente."
         },
         "answer": "C",
         "explanation": ""
     },
     {
         "id": "36",
-        "question": "AWS has created a large number of Edge Locations as part of its Global Infrastructure. Which of the following is NOT a benefit of using Edge Locations?",
+        "question": "A AWS criou um grande número de Localizações de Borda como parte de sua Infraestrutura Global. Qual das seguintes opções NÃO é um benefício de usar Localizações de Borda?",
         "options": {
-            "A": "Edge locations are used by CloudFront to cache the most recent responses.",
-            "B": "Edge locations are used by CloudFront to improve your end users\u2019 experience when uploading files.",
-            "C": "Edge locations are used by CloudFront to distribute traffic across multiple instances to reduce latency.",
-            "D": "Edge locations are used by CloudFront to distribute content to global users with low latency."
+            "A": "As Localizações de Borda são usadas pelo CloudFront para armazenar em cache as respostas mais recentes.",
+            "B": "As Localizações de Borda são usadas pelo CloudFront para melhorar a experiência dos seus usuários finais ao fazer upload de arquivos.",
+            "C": "As Localizações de Borda são usadas pelo CloudFront para distribuir o tráfego entre várias instâncias para reduzir a latência.",
+            "D": "As Localizações de Borda são usadas pelo CloudFront para distribuir conteúdo para usuários globais com baixa latência."
         },
         "answer": "C",
         "explanation": ""
     },
     {
         "id": "37",
-        "question": "What are the change management tools that helps AWS customers audit and monitor all resource changes in their AWS environment? (Choose TWO)",
+        "question": "Quais são as ferramentas de gerenciamento de mudanças que ajudam os clientes da AWS a auditar e monitorar todas as alterações de recursos em seu ambiente AWS? (Escolha DUAS)",
         "options": {
             "A": "AWS CloudTrail.",
             "B": "Amazon Comprehend.",
@@ -481,7 +481,7 @@
     },
     {
         "id": "38",
-        "question": "Which of the following services allows you to run containerized applications on a cluster of EC2 instances?",
+        "question": "Qual dos seguintes serviços permite que você execute aplicativos conteinerizados em um cluster de instâncias EC2?",
         "options": {
             "A": "Amazon ECS.",
             "B": "AWS Data Pipeline.",
@@ -493,7 +493,7 @@
     },
     {
         "id": "39",
-        "question": "Which of the following services will help businesses ensure compliance in AWS?",
+        "question": "Qual dos seguintes serviços ajudará as empresas a garantir conformidade na AWS?",
         "options": {
             "A": "CloudFront.",
             "B": "CloudEndure Migration.",
@@ -505,19 +505,19 @@
     },
     {
         "id": "40",
-        "question": "Which of the following procedures will help reduce your Amazon S3 costs?",
+        "question": "Qual dos seguintes procedimentos ajudará a reduzir seus custos com o Amazon S3?",
         "options": {
-            "A": "Use the Import\/Export feature to move old files automatically to Amazon Glacier.",
-            "B": "Use the right combination of storage classes based on different use cases.",
-            "C": "Pick the right Availability Zone for your S3 bucket.",
-            "D": "Move all the data stored in S3 standard to EBS."
+            "A": "Usar o recurso Import/Export para mover automaticamente arquivos antigos para o Amazon Glacier.",
+            "B": "Usar a combinação certa de classes de armazenamento com base em diferentes casos de uso.",
+            "C": "Escolher a Zona de Disponibilidade correta para o seu bucket S3.",
+            "D": "Mover todos os dados armazenados no S3 Standard para o EBS."
         },
         "answer": "B",
         "explanation": ""
     },
     {
         "id": "41",
-        "question": "What are the AWS services\/features that can help you maintain a highly available and fault-tolerant architecture in AWS? (Choose TWO)",
+        "question": "Quais são os serviços/recursos da AWS que podem ajudá-lo a manter uma arquitetura altamente disponível e tolerante a falhas na AWS? (Escolha DUAS)",
         "options": {
             "A": "AWS Direct Connect.",
             "B": "Amazon EC2 Auto Scaling.",
@@ -533,19 +533,19 @@
     },
     {
         "id": "42",
-        "question": "Which of the following activities may help reduce your AWS monthly costs?",
+        "question": "Qual das seguintes atividades pode ajudar a reduzir seus custos mensais da AWS?",
         "options": {
-            "A": "Enabling Amazon EC2 Auto Scaling for all of your workloads.",
-            "B": "Using the AWS Network Load Balancer (NLB) to load balance the incoming HTTP requests.",
-            "C": "Removing all of your Cost Allocation Tags.",
-            "D": "Deploying your AWS resources across multiple Availability Zones."
+            "A": "Habilitar o Amazon EC2 Auto Scaling para todas as suas cargas de trabalho.",
+            "B": "Usar o AWS Network Load Balancer (NLB) para balancear a carga das solicitações HTTP recebidas.",
+            "C": "Remover todos os seus Cost Allocation Tags.",
+            "D": "Implantar seus recursos da AWS em várias Zonas de Disponibilidade."
         },
         "answer": "A",
         "explanation": ""
     },
     {
         "id": "43",
-        "question": "What is the AWS service\/feature that takes advantage of Amazon CloudFront\u2019s globally distributed edge locations to transfer files to S3 with higher upload speeds?",
+        "question": "Qual é o serviço/recurso da AWS que aproveita as Localizações de Borda globalmente distribuídas do Amazon CloudFront para transferir arquivos para o S3 com maior velocidade de upload?",
         "options": {
             "A": "S3 Transfer Acceleration.",
             "B": "AWS WAF.",
@@ -557,7 +557,7 @@
     },
     {
         "id": "44",
-        "question": "Which of the following AWS security features is associated with an EC2 instance and functions to filter incoming traffic requests?",
+        "question": "Qual das seguintes características de segurança da AWS está associada a uma instância EC2 e funciona para filtrar solicitações de tráfego de entrada?",
         "options": {
             "A": "AWS X-Ray.",
             "B": "Network ACL.",
@@ -569,10 +569,10 @@
     },
     {
         "id": "45",
-        "question": "Which AWS services can be used to improve the performance of a global application and reduce latency for its users? (Choose TWO)",
+        "question": "Quais serviços da AWS podem ser usados para melhorar o desempenho de um aplicativo global e reduzir a latência para seus usuários? (Escolha DUAS)",
         "options": {
             "A": "AWS KMS.",
-            "B": "AWS Global accelerator.",
+            "B": "AWS Global Accelerator.",
             "C": "AWS Direct Connect.",
             "D": "AWS Glue.",
             "E": "Amazon CloudFront."
@@ -585,13 +585,13 @@
     },
     {
         "id": "46",
-        "question": "Using Amazon RDS falls under the shared responsibility model. Which of the following are customer responsibilities? (Choose TWO)",
+        "question": "Usar o Amazon RDS está sob o modelo de responsabilidade compartilhada. Quais das seguintes são responsabilidades do cliente? (Escolha DUAS)",
         "options": {
-            "A": "Building the relational database schema.",
-            "B": "Performing backups.",
-            "C": "Managing the database settings.",
-            "D": "Patching the database software.",
-            "E": "Installing the database software."
+            "A": "Construir o esquema de banco de dados relacional.",
+            "B": "Realizar backups.",
+            "C": "Gerenciar as configurações do banco de dados.",
+            "D": "Aplicar patches no software do banco de dados.",
+            "E": "Instalar o software do banco de dados."
         },
         "answer": [
             "A",
@@ -601,7 +601,7 @@
     },
     {
         "id": "47",
-        "question": "A company has a large amount of structured data stored in their on-premises data center. They are planning to migrate all the data to AWS, what is the most appropriate AWS database option?",
+        "question": "Uma empresa tem uma grande quantidade de dados estruturados armazenados em seu data center on-premises. Eles estão planejando migrar todos os dados para a AWS, qual é a opção de banco de dados AWS mais apropriada?",
         "options": {
             "A": "Amazon DynamoDB.",
             "B": "Amazon SNS.",
@@ -613,7 +613,7 @@
     },
     {
         "id": "48",
-        "question": "A company has created a solution that helps AWS customers improve their architectures on AWS. Which AWS program may support this company?",
+        "question": "Uma empresa criou uma solução que ajuda os clientes da AWS a melhorar suas arquiteturas na AWS. Qual programa da AWS pode apoiar essa empresa?",
         "options": {
             "A": "APN Consulting Partners.",
             "B": "AWS TAM.",
@@ -625,24 +625,24 @@
     },
     {
         "id": "49",
-        "question": "What is the AWS serverless service that allows you to run your applications without any administrative burden?",
+        "question": "Qual é o serviço AWS serverless que permite executar seus aplicativos sem nenhum encargo administrativo?",
         "options": {
             "A": "Amazon LightSail.",
             "B": "AWS Lambda.",
-            "C": "Amazon RDS instances.",
-            "D": "Amazon EC2 instances."
+            "C": "Instâncias Amazon RDS.",
+            "D": "Instâncias Amazon EC2."
         },
         "answer": "B",
         "explanation": ""
     },
     {
         "id": "50",
-        "question": "Jessica is managing an e-commerce web application in AWS. The application is hosted on six EC2 instances. One day, three of the instances crashed; but none of her customers were affected. What has Jessica done correctly in this scenario?",
+        "question": "Jessica está gerenciando um aplicativo web de e-commerce na AWS. O aplicativo está hospedado em seis instâncias EC2. Um dia, três das instâncias falharam; mas nenhum de seus clientes foi afetado. O que Jessica fez corretamente neste cenário?",
         "options": {
-            "A": "She has properly built an elastic system.",
-            "B": "She has properly built a fault tolerant system.",
-            "C": "She has properly built an encrypted system.",
-            "D": "She has properly built a scalable system."
+            "A": "Ela construiu corretamente um sistema elástico.",
+            "B": "Ela construiu corretamente um sistema tolerante a falhas.",
+            "C": "Ela construiu corretamente um sistema criptografado.",
+            "D": "Ela construiu corretamente um sistema escalável."
         },
         "answer": "B",
         "explanation": ""
