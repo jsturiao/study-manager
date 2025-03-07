@@ -7,45 +7,45 @@ header('Content-Type: application/json');
 session_start();
 
 if (!isset($_SESSION['userId'])) {
-    http_response_code(401);
-    echo json_encode([
-        'success' => false,
-        'error' => 'User not authenticated'
-    ]);
-    exit;
+	http_response_code(401);
+	echo json_encode([
+		'success' => false,
+		'error' => 'User not authenticated'
+	]);
+	exit;
 }
 
 // Get file parameter
 $file = isset($_GET['file']) ? $_GET['file'] : null;
 
 if (!$file) {
-    http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'error' => 'No file specified'
-    ]);
-    exit;
+	http_response_code(400);
+	echo json_encode([
+		'success' => false,
+		'error' => 'No file specified'
+	]);
+	exit;
 }
 
 try {
-    $examManager = new ExamManager();
-    $progress = $examManager->loadProgress($_SESSION['userId'], $file);
-    
-    if ($progress) {
-        echo json_encode([
-            'success' => true,
-            'data' => $progress
-        ]);
-    } else {
-        echo json_encode([
-            'success' => true,
-            'data' => null
-        ]);
-    }
+	$examManager = new ExamManager();
+	$progress = $examManager->loadProgress($_SESSION['userId'], $file);
+
+	if ($progress) {
+		echo json_encode([
+			'success' => true,
+			'data' => $progress
+		]);
+	} else {
+		echo json_encode([
+			'success' => true,
+			'data' => null
+		]);
+	}
 } catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
-    ]);
+	http_response_code(500);
+	echo json_encode([
+		'success' => false,
+		'error' => $e->getMessage()
+	]);
 }

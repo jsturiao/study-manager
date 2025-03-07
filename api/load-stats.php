@@ -7,27 +7,27 @@ header('Content-Type: application/json');
 session_start();
 
 if (!isset($_SESSION['userId'])) {
-    http_response_code(401);
-    echo json_encode([
-        'success' => false,
-        'error' => 'User not authenticated'
-    ]);
-    exit;
+  http_response_code(401);
+  echo json_encode([
+    'success' => false,
+    'error' => 'User not authenticated'
+  ]);
+  exit;
 }
 
 try {
-    $examManager = new ExamManager();
-    $stats = $examManager->getAllFileStats($_SESSION['userId']);
-    
-    echo json_encode([
-        'success' => true,
-        'stats' => $stats
-    ]);
+  $examManager = new ExamManager();
+  $stats = $examManager->getAllFileStats($_SESSION['userId']);
+
+  echo json_encode([
+    'success' => true,
+    'stats' => $stats
+  ]);
 } catch (Exception $e) {
-    error_log('Error in load-stats.php: ' . $e->getMessage());
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
-    ]);
+  error_log('Error in load-stats.php: ' . $e->getMessage());
+  http_response_code(500);
+  echo json_encode([
+    'success' => false,
+    'error' => $e->getMessage()
+  ]);
 }
