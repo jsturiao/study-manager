@@ -74,65 +74,120 @@ if (is_dir($questionDir)) {
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 	<style>
 		.question-card {
-			margin-bottom: 20px;
-			padding: 20px;
-			border: 1px solid #ddd;
-			border-radius: 8px;
+		    margin-bottom: 1.5rem;
+		    padding: 1.25rem;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 8px;
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+		    background-color: #fff;
+		}
+		
+		.margem{
+			margin-left: 5%;
+			margin-right: 5%;
 		}
 
 		.option-label {
-			display: block;
-			padding: 10px;
-			margin: 5px 0;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			cursor: pointer;
+		    display: flex;
+		    align-items: center;
+		    padding: 0.75rem 1rem;
+		    margin: 0.35rem 0;
+		    border: 1px solid #e0e0e0;
+		    border-radius: 6px;
+		    cursor: pointer;
+		    transition: all 0.2s ease;
+		    font-size: 0.95rem;
+		    line-height: 1.4;
 		}
-
+		
+		.option-label input[type="radio"],
+		.option-label input[type="checkbox"] {
+		    margin-right: 0.75rem;
+		}
+		
 		.option-label:hover {
-			background-color: #f8f9fa;
+		    background-color: #f8f9fa;
+		    border-color: #0d6efd;
+		    transform: translateX(4px);
 		}
-
+		
 		.selected {
-			background-color: #e7f3ff;
-			border-color: #0d6efd;
+		    background-color: #ebf5ff;
+		    border-color: #0d6efd;
+		    box-shadow: 0 2px 4px rgba(13,110,253,0.15);
 		}
 
 		.answer-status {
-			margin-top: 15px;
-			padding: 15px;
-			border-radius: 5px;
-			display: none;
+		    margin: 1rem 0;
+		    padding: 1rem;
+		    border-radius: 6px;
+		    display: none;
+		    font-weight: 500;
+		    border-left: 4px solid;
 		}
-
+		
 		.answer-status.correct {
-			background-color: #d4edda;
-			border-color: #c3e6cb;
-			color: #155724;
+		    background-color: #edfcf3;
+		    border-color: #28a745;
+		    color: #0d6832;
 		}
-
+		
 		.answer-status.incorrect {
-			background-color: #f8d7da;
-			border-color: #f5c6cb;
-			color: #721c24;
+		    background-color: #fff5f5;
+		    border-color: #dc3545;
+		    color: #a52834;
 		}
-
+		
 		.explanation {
-			margin-top: 15px;
-			padding: 15px;
-			background-color: #f8f9fa;
-			border-radius: 5px;
-			display: none;
+		    margin: 1rem 0;
+		    padding: 1rem 1.25rem;
+		    background-color: #f8f9fa;
+		    border-radius: 6px;
+		    display: none;
+		    border-left: 4px solid #6c757d;
+		    font-size: 0.95rem;
+		    line-height: 1.5;
+		    color: #2c3e50;
+		}
+		
+		.question-text {
+		    font-size: 1rem;
+		    line-height: 1.6;
+		    color: #2c3e50;
+		    margin: 1rem 0 1.5rem;
+		    padding: 0.75rem 1rem;
+		    background-color: #f8f9fa;
+		    border-radius: 6px;
+		    border-left: 4px solid #0d6efd;
 		}
 
 		.option-correct {
-			background-color: #d4edda !important;
-			border-color: #28a745 !important;
+		    background-color: rgba(40, 167, 69, 0.1) !important;
+		    border-color: #28a745 !important;
+		    position: relative;
 		}
-
+		
+		.option-correct::after {
+		    content: '✓';
+		    position: absolute;
+		    right: 1rem;
+		    color: #28a745;
+		    font-weight: bold;
+		}
+		
 		.option-incorrect {
-			background-color: #f8d7da !important;
-			border-color: #dc3545 !important;
+		    background-color: rgba(220, 53, 69, 0.1) !important;
+		    border-color: #dc3545 !important;
+		    position: relative;
+		}
+		
+		.option-incorrect::after {
+		    content: '×';
+		    position: absolute;
+		    right: 1rem;
+		    color: #dc3545;
+		    font-weight: bold;
+		    font-size: 1.2em;
 		}
 
 		.question-set-card {
@@ -207,22 +262,42 @@ if (is_dir($questionDir)) {
 		}
 
 		.question-status-icon {
-			position: absolute;
-			top: 5px;
-			right: 5px;
-			font-size: 1.2em;
+		    position: absolute;
+		    top: 1rem;
+		    right: 1rem;
+		    width: 28px;
+		    height: 28px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    border-radius: 50%;
+		    font-size: 1rem;
 		}
-
+		
 		.status-correct {
-			color: #28a745;
+		    background-color: #28a745;
+		    color: #fff;
+		    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
 		}
-
+		
 		.status-incorrect {
-			color: #dc3545;
+		    background-color: #dc3545;
+		    color: #fff;
+		    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
 		}
-
+		
 		.status-unanswered {
-			color: #6c757d;
+		    background-color: #6c757d;
+		    color: #fff;
+		    opacity: 0.5;
+		}
+		
+		.card-title {
+		    font-size: 1.25rem;
+		    color: #2c3e50;
+		    margin-bottom: 1.5rem;
+		    padding-bottom: 1rem;
+		    border-bottom: 2px solid #f0f0f0;
 		}
 
 		#examContainer {
@@ -234,13 +309,61 @@ if (is_dir($questionDir)) {
 		}
 
 		.multiple-answer-notice {
-			color: #856404;
-			background-color: #fff3cd;
-			border: 1px solid #ffeeba;
-			padding: 10px;
-			margin-bottom: 15px;
-			border-radius: 5px;
-			display: none;
+		    color: #664d03;
+		    background-color: #fff3cd;
+		    border-left: 4px solid #ffc107;
+		    padding: 1rem 1.25rem;
+		    margin: 1rem 0 1.5rem;
+		    border-radius: 6px;
+		    display: none;
+		    font-size: 0.95rem;
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+		}
+		
+		.multiple-answer-notice::before {
+		    content: '📝';
+		    margin-right: 0.5rem;
+		}
+		
+		.submit-answer {
+		    background-color: #28a745;
+		    border: none;
+		    padding: 0.75rem 2rem;
+		    font-weight: 500;
+		    text-transform: uppercase;
+		    letter-spacing: 0.5px;
+		    transition: all 0.2s;
+		    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+		}
+		
+		.submit-answer:hover:not(:disabled) {
+		    background-color: #218838;
+		    transform: translateY(-2px);
+		    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+		}
+		
+		.submit-answer:disabled {
+		    background-color: #6c757d;
+		    opacity: 0.65;
+		    cursor: not-allowed;
+		}
+		
+		.navigation-buttons {
+		    margin-top: 2rem;
+		    padding-top: 1.5rem;
+		    border-top: 1px solid #e0e0e0;
+		}
+		
+		.navigation-buttons .btn {
+		    padding: 0.75rem 1.5rem;
+		    font-weight: 500;
+		    letter-spacing: 0.5px;
+		    transition: all 0.2s;
+		}
+		
+		.navigation-buttons .btn:hover:not(:disabled) {
+		    transform: translateY(-2px);
+		    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 		}
 
 		/* Wrong answers review styles */
@@ -617,7 +740,7 @@ if (is_dir($questionDir)) {
 
 	<!-- Exam View -->
 	<div id="examContainer">
-		<div class="row">
+		<div class="row margem">
 			<div class="col-md-8">
 				<div id="questionContainer">
 					<!-- Questions will be loaded here -->
@@ -1137,8 +1260,7 @@ if (response.success && response.data) {
 			const hasMultipleAnswers = Array.isArray(question.answer);
 
 			statusDiv.show();
-			explanationDiv.show();
-
+			
 			if (answer.correct) {
 				statusDiv.html('Correct! 🎉').removeClass('incorrect').addClass('correct');
 			} else {
@@ -1148,8 +1270,10 @@ if (response.success && response.data) {
 				statusDiv.html(`Incorrect. The correct answer is: ${correctAnswer}`).removeClass('correct').addClass('incorrect');
 			}
 
-			if (question.explanation) {
-				explanationDiv.html(`<strong>Explanation:</strong> ${question.explanation}`);
+			if (question.explanation && question.explanation.trim()) {
+			    explanationDiv.html(`<strong>Explanation:</strong> ${question.explanation}`).show();
+			} else {
+			    explanationDiv.hide();
 			}
 		}
 
