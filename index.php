@@ -10,7 +10,7 @@ if (!isset($_SESSION['userId'])) {
     $_SESSION['userId'] = 'user_67c20b49f1aa3';  // ID fixo que já possui histórico
 }
 
-$parser = new Parser();
+$parser = new Parser('data/cache'); // Relativo à pasta /api
 $examManager = new ExamManager();
 
 // Get question sets and their stats
@@ -1203,67 +1203,90 @@ if (response.success && response.data) {
 
 			updateProgress();
 
-			// Prepare answer data with proper types
-			const answerData = {
-				questionId: parseInt(questionId, 10),
-				answer: selectedAnswers,
-				file: currentFile,
-				correct: Boolean(isCorrect),
-				correctAnswer: question.answer
+			// Prepare the answer data in the format ExamManager expects
+			const answer = {
+			    questionId: parseInt(questionId, 10),
+			    examFile: currentFile,
+			    answer: selectedAnswers,
+			    correctAnswer: question.answer,
+			    correct: isCorrect,
+			    timestamp: Math.floor(Date.now() / 1000),
+			    answered: true
 			};
-
-			console.log('Question details:', question);
-			console.log('Submitting answer:', answerData);
-
-			// Save to server and update statistics
-			// Log the complete request
-			console.log('Current question:', question);
-			console.log('Selected answers:', selectedAnswers);
-			console.log('Current file:', currentFile);
-
+			
+			console.log('Preparing answer:', answer);
+			
+			// Prepare the answer with questionId as key
+			const answerData = {};
+			answerData[answer.questionId] = {
+			    questionNumber: answer.questionId,
+			    answer: answer.answer,
+			    correctAnswer: answer.correctAnswer,
+			    correct: answer.correct,
+			    answered: true,
+			    timestamp: Math.floor(Date.now() / 1000)
+			};
+			
+			// Create the request data
 			const requestData = {
-				answers: JSON.stringify(answerData)
+			    answers: JSON.stringify({
+			        questionId: answer.questionId,
+			        answer: answer.answer,
+			        file: currentFile,
+			        correct: answer.correct,
+			        correctAnswer: answer.correctAnswer
+			    })
 			};
-			console.log('Request data:', requestData);
+			
+			console.log('Submitting answer:', {
+			    data: JSON.parse(requestData.answers)
+			});
+			
+			console.log('Sending request:', requestData);
 
-			$.post('api/save-progress.php', requestData)
-				.done(function(response) {
-					console.log('Server response:', response);
-					if (response.success) {
-						console.log('Answer saved successfully. Stats:', response.stats);
-					} else {
-						console.error('Failed to save answer:', response.error);
-					}
-					if (response.success) {
-						showAnswerStatus(questionId);
-
-						// Update all stats after successful answer submission
-						loadAndUpdateHomeStats();
-						// Disable all options and the submit button
-						const card = $(`.question-card[data-question-id="${questionId}"]`);
-						card.find('input').prop('disabled', true);
-						card.find('.submit-answer').prop('disabled', true);
-						// Mark correct and incorrect options
-						card.find('.option-label').addClass('disabled');
-
-						card.find('.option-label').each(function() {
-							const value = $(this).find('input').val();
-							const isSelected = selectedAnswers.includes(value);
-							const isCorrectAnswer = hasMultipleAnswers ?
-								question.answer.includes(value) :
-								question.answer === value;
-
-							if (isSelected && isCorrectAnswer) {
-								$(this).addClass('option-correct');
-							} else if (isSelected && !isCorrectAnswer) {
-								$(this).addClass('option-incorrect');
-							} else if (!isSelected && isCorrectAnswer) {
-								$(this).addClass('option-correct');
-							}
-						});
-					} else {
-						alert('Error saving answer: ' + response.error);
-					}
+			$.post('api/save-progress.php', requestData, function(response) {
+			    console.log('Server response:', response);
+			    
+			    if (response.success) {
+			        console.log('Answer saved successfully');
+			        showAnswerStatus(questionId);
+			        
+			        const card = $(`.question-card[data-question-id="${questionId}"]`);
+			        
+			        // Disable inputs and button
+			        card.find('input').prop('disabled', true);
+			        card.find('.submit-answer').prop('disabled', true);
+			        
+			        // Mark correct/incorrect answers
+			        card.find('.option-label').each(function() {
+			            const value = $(this).find('input').val();
+			            const isSelected = selectedAnswers.includes(value);
+			            const isCorrect = hasMultipleAnswers ?
+			                question.answer.includes(value) :
+			                question.answer === value;
+			                
+			            if (isSelected && isCorrect) {
+			                $(this).addClass('option-correct');
+			            } else if (isSelected && !isCorrect) {
+			                $(this).addClass('option-incorrect');
+			            } else if (!isSelected && isCorrect) {
+			                $(this).addClass('option-correct');
+			            }
+			        });
+			        
+			        // Update stats
+			        loadAndUpdateHomeStats();
+			    } else {
+			        console.error('Error saving answer:', response.error);
+			        alert('Error saving answer: ' + response.error);
+			    }
+			}, 'json').fail(function(xhr, status, error) {
+			    console.error('AJAX request failed:', {
+			        status: status,
+			        error: error,
+			        response: xhr.responseText
+			    });
+			    alert('Failed to save answer. Please try again.');
 				});
 		}
 

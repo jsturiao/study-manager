@@ -3,18 +3,23 @@ class Parser
 {
 	private $cachePath;
 
-	public function __construct($cachePath = 'api/data/cache')
+	public function __construct($cachePath = 'data/cache')
 	{
-		$this->cachePath = $cachePath;
-		if (!is_dir($cachePath)) {
-			mkdir($cachePath, 0777, true);
-		}
+	    // Ensure paths are always relative to /api
+	    if (strpos($cachePath, '/') === 0) {
+	        // Convert absolute path to relative
+	        $cachePath = trim(str_replace($_SERVER['DOCUMENT_ROOT'], '', $cachePath), '/');
+	    }
+	    $this->cachePath = $cachePath;
 	}
 
 	public function parseFile($filePath)
 	{
-		// Get JSON cache path
-		$cacheFile = $this->cachePath . '/' . basename($filePath, '.md') . '.json';
+	    error_log("Parser::parseFile - Input file: " . $filePath);
+	    
+	    // Get JSON cache path
+	    $cacheFile = $this->cachePath . '/' . basename($filePath, '.md') . '.json';
+	    error_log("Parser::parseFile - Cache file: " . $cacheFile);
 
 		// Return cached version if it exists and is newer than MD file
 		if (file_exists($cacheFile) && filemtime($cacheFile) > filemtime($filePath)) {

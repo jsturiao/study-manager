@@ -1,4 +1,9 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+error_log("Starting save-progress.php");
+
 require_once __DIR__ . '/../includes/ExamManager.php';
 
 header('Content-Type: application/json');
@@ -16,70 +21,37 @@ if (!isset($_SESSION['userId'])) {
 }
 
 // Get POST data
-$rawData = $_POST['answers'];
-error_log("Raw POST data received: " . $rawData);
+error_log("POST data received: " . print_r($_POST, true));
 
-$data = json_decode($rawData, true);
-error_log("Decoded data: " . print_r($data, true));
-
-if (
-	!$data ||
-	!isset($data['questionId']) ||
-	!isset($data['answer']) ||
-	!isset($data['file']) ||
-	!isset($data['correct']) ||
-	!isset($data['correctAnswer'])
-) {
-	http_response_code(400);
-	echo json_encode([
-		'success' => false,
-		'error' => 'Invalid data provided'
-	]);
-	exit;
+if (!isset($_POST['answers'])) {
+    error_log("No 'answers' found in POST data");
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'error' => 'No answer data provided'
+    ]);
+    exit;
 }
 
+$rawData = $_POST['answers'];
+error_log("Raw answer data: " . $rawData);
+
 try {
-	$examManager = new ExamManager();
+    $data = json_decode($_POST['answers'], true);
+    error_log("Decoded answer data: " . print_r($data, true));
 
-	// Load current progress
-	$progress = $examManager->loadProgress($_SESSION['userId'], $data['file']) ?? [
-		'userId' => $_SESSION['userId'],
-		'fileId' => $data['file'],
-		'answers' => [],
-		'timestamp' => time()
-	];
+    if (!isset($_POST['file'])) {
+        throw new Exception("File not specified");
+    }
 
-	// Ensure answers array exists
-	if (!isset($progress['answers']) || !is_array($progress['answers'])) {
-		$progress['answers'] = [];
-	}
+    $examManager = new ExamManager();
+    $stats = $examManager->saveProgress(
+        $_SESSION['userId'],
+        $_POST['file'],
+        $data
+    );
 
-	// Convert questionId to integer and ensure it's valid
-	$questionNumber = intval($data['questionId']);
-	if ($questionNumber <= 0) {
-		throw new Exception("Invalid question number: " . $data['questionId']);
-	}
-
-	error_log("Processing question number: " . $questionNumber);
-
-	// Update the specific question's answer with validated data
-	$progress['answers'][$questionNumber] = [
-		'questionNumber' => $questionNumber,
-		'examFile' => $data['file'],
-		'answer' => $data['answer'],
-		'correctAnswer' => $data['correctAnswer'],
-		'correct' => (bool)$data['correct'],
-		'answered' => true,
-		'timestamp' => time()
-	];
-
-	error_log("Progress structure before save: " . print_r($progress, true));
-
-	$stats = $examManager->saveProgress(
-		$_SESSION['userId'],
-		$data['file'],
-		$progress['answers']
-	);
+    error_log("Progress saved successfully, stats: " . print_r($stats, true));
 
 	$response = [
 		'success' => true,

@@ -7,10 +7,35 @@ class ExamManager
 
     public function __construct()
     {
-        // Use existing directories in api/data
-        $this->dataPath = 'api/data';
-        $this->resultsPath = 'api/data/results';
-        $this->statsPath = 'api/data/stats';
+        // Define paths relative to the /api directory
+        $basePath = __DIR__ . '/../api';
+        $this->dataPath = realpath($basePath . '/data');
+        $this->resultsPath = realpath($basePath . '/data/results');
+        $this->statsPath = realpath($basePath . '/data/stats');
+
+        error_log("ExamManager initialized with paths:");
+        error_log("Data path: " . $this->dataPath);
+        error_log("Results path: " . $this->resultsPath);
+        error_log("Stats path: " . $this->statsPath);
+        
+        // Ensure required directories exist
+        $dirs = [
+            $this->dataPath,
+            $this->resultsPath,
+            $this->statsPath,
+            $this->dataPath . '/cache',
+            $this->dataPath . '/questions'
+        ];
+        
+        foreach ($dirs as $dir) {
+            if (!is_dir($dir)) {
+                error_log("Creating directory: $dir");
+                if (!mkdir($dir, 0777, true)) {
+                    error_log("Failed to create directory: $dir");
+                    throw new Exception("Failed to create required directory: $dir");
+                }
+            }
+        }
 
         // Convert MD files to JSON only if they don't exist in cache
         $this->convertMdFilesToJson();
@@ -137,25 +162,14 @@ class ExamManager
         return max($detailsCount, $answerCount, $numberedQuestions);
     }
 
-    public function saveProgress($userId, $fileId, $answers)
+    public function saveProgress($userId, $fileId, $answer)
     {
         error_log("SaveProgress called with userId: $userId, fileId: $fileId");
-        
-        if (!is_array($answers)) {
-            throw new Exception("Invalid answers format");
-        }
-        
+        error_log("Answer data: " . print_r($answer, true));
+
         $filename = $this->resultsPath . "/{$userId}_{$fileId}.json";
         
-        $existingData = [];
-        if (file_exists($filename)) {
-            $existingContent = file_get_contents($filename);
-            if ($existingContent === false) {
-                throw new Exception("Failed to read existing progress file");
-            }
-            $existingData = json_decode($existingContent, true) ?: [];
-        }
-        
+        // Load or create progress data
         $data = [
             'userId' => $userId,
             'fileId' => $fileId,
@@ -163,49 +177,47 @@ class ExamManager
             'timestamp' => time()
         ];
 
-        if (isset($existingData['answers']) && is_array($existingData['answers'])) {
-            foreach ($existingData['answers'] as $qNum => $answer) {
-                if (isset($answer['questionNumber']) && isset($answer['answer'])) {
-                    $data['answers'][$qNum] = $answer;
+        // Load existing answers if available
+        if (file_exists($filename)) {
+            $existingContent = file_get_contents($filename);
+            if ($existingContent !== false) {
+                $existingData = json_decode($existingContent, true) ?: [];
+                if (isset($existingData['answers']) && is_array($existingData['answers'])) {
+                    $data['answers'] = $existingData['answers'];
                 }
             }
         }
 
-        if (isset($answers['questionId'])) {
-            $questionNumber = (int)$answers['questionId'];
-            $data['answers'][$questionNumber] = [
-                'questionNumber' => $questionNumber,
-                'examFile' => $fileId,
-                'answer' => $answers['answer'],
-                'correctAnswer' => $answers['correctAnswer'],
-                'correct' => (bool)$answers['correct'],
-                'answered' => true,
-                'timestamp' => time()
-            ];
-        } else if (is_array($answers)) {
-            foreach ($answers as $answer) {
-                if (isset($answer['questionId'])) {
-                    $questionNumber = (int)$answer['questionId'];
-                } else if (isset($answer['question']) && preg_match('/^Question\s+(\d+)/i', $answer['question'], $matches)) {
-                    $questionNumber = (int)$matches[1];
-                } else {
-                    continue;
-                }
-                
-                $data['answers'][$questionNumber] = [
-                    'questionNumber' => $questionNumber,
-                    'examFile' => $fileId,
-                    'answer' => $answer['answer'],
-                    'correctAnswer' => $answer['correctAnswer'],
-                    'answered' => true,
-                    'correct' => (bool)$answer['correct'],
-                    'timestamp' => time()
-                ];
-            }
+        // Add the new answer to existing answers
+        $questionId = (int)$answer['questionId'];
+        $data['answers'][$questionId] = [
+            'questionNumber' => $questionId,
+            'examFile' => $fileId,
+            'answer' => $answer['answer'],
+            'correctAnswer' => $answer['correctAnswer'],
+            'correct' => (bool)$answer['correct'],
+            'answered' => true,
+            'timestamp' => time()
+        ];
+
+        error_log("Saving progress data: " . print_r($data, true));
+        
+        // Ensure directory exists
+        $dir = dirname($filename);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        // Save data with pretty print for readability
+        $saved = file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
+        if ($saved === false) {
+            throw new Exception("Failed to save progress to file: $filename");
         }
         
-        file_put_contents($filename, json_encode($data));
-        
+        error_log("Progress saved successfully to: $filename");
+        error_log("Saved data: " . print_r($data, true));
+
+        // Update and return stats
         $stats = $this->calculateAndSaveStats($userId, $fileId);
         return $stats;
     }
