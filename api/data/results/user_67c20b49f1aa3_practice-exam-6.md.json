@@ -10,7 +10,44 @@
             "correct": false,
             "answered": true,
             "timestamp": 1741895161
+        },
+        {
+            "questionNumber": 1,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "D"
+            ],
+            "correctAnswer": "D",
+            "correct": true,
+            "answered": true,
+            "timestamp": 1741898300
+        },
+        {
+            "questionNumber": 2,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "A",
+                "C"
+            ],
+            "correctAnswer": [
+                "A",
+                "C"
+            ],
+            "correct": true,
+            "answered": true,
+            "timestamp": 1741898325
+        },
+        {
+            "questionNumber": 3,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "C"
+            ],
+            "correctAnswer": "C",
+            "correct": true,
+            "answered": true,
+            "timestamp": 1741898344
         }
     ],
-    "timestamp": 1741895161
+    "timestamp": 1741898344
 }

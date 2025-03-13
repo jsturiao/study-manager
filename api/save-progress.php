@@ -24,13 +24,13 @@ if (!isset($_SESSION['userId'])) {
 error_log("POST data received: " . print_r($_POST, true));
 
 if (!isset($_POST['answers'])) {
-    error_log("No 'answers' found in POST data");
-    http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'error' => 'No answer data provided'
-    ]);
-    exit;
+	error_log("No 'answers' found in POST data");
+	http_response_code(400);
+	echo json_encode([
+		'success' => false,
+		'error' => 'No answer data provided'
+	]);
+	exit;
 }
 
 $rawData = $_POST['answers'];
@@ -40,14 +40,14 @@ try {
     $data = json_decode($_POST['answers'], true);
     error_log("Decoded answer data: " . print_r($data, true));
 
-    if (!isset($_POST['file'])) {
-        throw new Exception("File not specified");
+    if (!isset($data['file'])) {
+        throw new Exception("File not specified in answer data");
     }
 
     $examManager = new ExamManager();
     $stats = $examManager->saveProgress(
         $_SESSION['userId'],
-        $_POST['file'],
+        $data['file'],  // Usando file do JSON decodificado
         $data
     );
 
