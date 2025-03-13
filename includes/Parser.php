@@ -3,7 +3,7 @@ class Parser
 {
 	private $cachePath;
 
-	public function __construct($cachePath = 'data/cache')
+	public function __construct($cachePath = 'api/data/cache')
 	{
 		$this->cachePath = $cachePath;
 		if (!is_dir($cachePath)) {

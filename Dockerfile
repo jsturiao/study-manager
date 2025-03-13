@@ -11,8 +11,8 @@ WORKDIR /var/www/html
 
 # Create necessary directories
 RUN mkdir -p /var/www/html/data/cache \
-    && mkdir -p /var/www/html/data/results \
-    && mkdir -p /var/www/html/data/questions
+    && mkdir -p /var/www/html/api/data/results \
+    && mkdir -p /var/www/html/api/data/questions
 
 # Copy application files
 COPY . /var/www/html/

@@ -17,7 +17,7 @@ if (!$requestedFile) {
 	exit;
 }
 
-$questionsFile = __DIR__ . '/../data/questions/' . basename($requestedFile);
+$questionsFile = __DIR__ . '/../api/data/questions/' . basename($requestedFile);
 
 try {
 	if (!file_exists($questionsFile)) {

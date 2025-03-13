@@ -6,7 +6,8 @@ require_once __DIR__ . '/includes/ExamManager.php';
 // Initialize session for user tracking
 session_start();
 if (!isset($_SESSION['userId'])) {
-	$_SESSION['userId'] = uniqid('user_');
+    // Usando um ID fixo para manter histórico e estatísticas
+    $_SESSION['userId'] = 'user_67c20b49f1aa3';  // ID fixo que já possui histórico
 }
 
 $parser = new Parser();
@@ -14,11 +15,11 @@ $examManager = new ExamManager();
 
 // Get question sets and their stats
 $questionSets = [];
-$questionDir = __DIR__ . '/data/questions';
+$questionDir = __DIR__ . '/api/data/questions';
 
-// Ensure question directory exists
+// Using existing question directory
 if (!is_dir($questionDir)) {
-	mkdir($questionDir, 0777, true);
+    error_log("Warning: Question directory not found: $questionDir");
 }
 
 // Get file stats
@@ -939,9 +940,14 @@ if (response.success && response.data) {
 		});
 
 		function loadAndUpdateHomeStats() {
-			$.getJSON('api/load-stats.php', function(response) {
-				if (response.success) {
-					console.log('Loaded home stats:', response.stats);
+		console.log('Loading stats...');
+		$.getJSON('api/load-stats.php', function(response) {
+		if (response.success) {
+		console.log('Loaded home stats:', response.stats);
+		if (!response.stats || Object.keys(response.stats).length === 0) {
+		    console.log('No stats data available');
+		    return;
+		}
 					let totalQuestions = 0;
 					let totalAnswered = 0;
 					let totalCorrect = 0;
@@ -949,17 +955,26 @@ if (response.success && response.data) {
 					const totalSets = Object.keys(response.stats).length;
 
 					// Calculate totals
+					console.log('Processing stats data...');
 					Object.entries(response.stats).forEach(([fileId, fileStats]) => {
-						totalQuestions += fileStats.total || 0;
-						totalAnswered += fileStats.answered || 0;
-						totalCorrect += fileStats.correct || 0;
-
-						if (fileStats.answered === fileStats.total && fileStats.total > 0) {
-							completedSets++;
-						}
-
-						// Update individual card stats
-						updateCardStats(fileId, fileStats);
+					    console.log(`Processing file ${fileId}:`, fileStats);
+					    totalQuestions += fileStats.total || 0;
+					    totalAnswered += fileStats.answered || 0;
+					    totalCorrect += fileStats.correct || 0;
+					
+					    if (fileStats.answered === fileStats.total && fileStats.total > 0) {
+					        completedSets++;
+					    }
+					
+					    // Update individual card stats
+					    updateCardStats(fileId, fileStats);
+					});
+					
+					console.log('Calculated totals:', {
+					    totalQuestions,
+					    totalAnswered,
+					    totalCorrect,
+					    completedSets
 					});
 
 					// Update overall progress
