@@ -58,7 +58,48 @@
             "correct": true,
             "answered": true,
             "timestamp": 1741967557
+        },
+        {
+            "questionNumber": 5,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "C",
+                "D"
+            ],
+            "correctAnswer": [
+                "D",
+                "E"
+            ],
+            "correct": false,
+            "answered": true,
+            "timestamp": 1741973040
+        },
+        {
+            "questionNumber": 6,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "A",
+                "C"
+            ],
+            "correctAnswer": [
+                "B",
+                "C"
+            ],
+            "correct": false,
+            "answered": true,
+            "timestamp": 1741975271
+        },
+        {
+            "questionNumber": 7,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "D"
+            ],
+            "correctAnswer": "B",
+            "correct": false,
+            "answered": true,
+            "timestamp": 1741975295
         }
     ],
-    "timestamp": 1741967557
+    "timestamp": 1741975295
 }
