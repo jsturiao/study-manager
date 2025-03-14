@@ -47,7 +47,18 @@
             "correct": true,
             "answered": true,
             "timestamp": 1741898344
+        },
+        {
+            "questionNumber": 4,
+            "examFile": "practice-exam-6.md",
+            "answer": [
+                "A"
+            ],
+            "correctAnswer": "A",
+            "correct": true,
+            "answered": true,
+            "timestamp": 1741967557
         }
     ],
-    "timestamp": 1741898344
+    "timestamp": 1741967557
 }

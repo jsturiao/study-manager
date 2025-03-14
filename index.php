@@ -896,49 +896,35 @@ if (response.success && response.data) {
 });
 }
 
-		// Add tab event listener in document ready
+		// Initialize when document is ready
 		$(document).ready(function() {
-			// Load initial stats and refresh every 30 seconds
-			loadAndUpdateHomeStats();
-			setInterval(loadAndUpdateHomeStats, 30000);
-
-			// Initialize tabs and load initial data
-			$('[data-bs-toggle="tab"]').on('click', function(e) {
-			    e.preventDefault();
-			    const target = $(this).data('bs-target');
-			    
-			    // Remove active class from all buttons and add to clicked one
-			    $('[data-bs-toggle="tab"]').removeClass('active');
-			    $(this).addClass('active');
-			    
-			    // Hide all tab panes and show the target one
-			    $('.tab-pane').removeClass('show active');
-			    $(target).addClass('show active');
-			    
-			    // If wrong answers tab is clicked, load the data
-			    if (target === '#review-tab-pane') {
-			        loadWrongAnswers();
-			    }
-			});
-
-			// Initial load of wrong answers count
-			loadWrongAnswersCount();
-
-			function loadWrongAnswersCount() {
-			    $.getJSON('api/wrong-answers.php', function(response) {
-			        if (response.success && response.data) {
-			            let totalWrong = 0;
-			            Object.values(response.data).forEach(data => {
-			                totalWrong += data.totalWrong;
-			            });
-			            if (totalWrong > 0) {
-			                $('#wrongAnswersCount').text(totalWrong);
-			            }
-			        }
-			    });
-			}
+		    // Load initial stats once
+		    loadAndUpdateHomeStats();
+		    
+		    // Initialize tabs and load initial data
+		    $('[data-bs-toggle="tab"]').on('click', function(e) {
+		        e.preventDefault();
+		        const target = $(this).data('bs-target');
+		        
+		        // Remove active class from all buttons and add to clicked one
+		        $('[data-bs-toggle="tab"]').removeClass('active');
+		        $(this).addClass('active');
+		        
+		        // Hide all tab panes and show the target one
+		        $('.tab-pane').removeClass('show active');
+		        $(target).addClass('show active');
+		        
+		        // If wrong answers tab is clicked, load the data
+		        if (target === '#review-tab-pane') {
+		            loadWrongAnswers();
+		        }
+		    });
+		
+		    // Initial load of wrong answers count
+		    loadWrongAnswersCount();
 		});
-
+		
+		// Function to load and update home stats
 		function loadAndUpdateHomeStats() {
 		console.log('Loading stats...');
 		$.getJSON('api/load-stats.php', function(response) {
@@ -996,12 +982,6 @@ if (response.success && response.data) {
 				}
 			});
 		}
-
-		$(document).ready(function() {
-			// Load initial stats and refresh every 30 seconds
-			loadAndUpdateHomeStats();
-			setInterval(loadAndUpdateHomeStats, 30000);
-		});
 
 		function showQuestionSets() {
 			$('#examContainer').hide();
